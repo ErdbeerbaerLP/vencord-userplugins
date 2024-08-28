@@ -17,4 +17,4 @@ Automate some actions using scripts. Be aware that spamming the API is never a g
 Of course this can also be used with other tools as well!
 
 ## API Documentation
-replace with url here
+https://github.com/ErdbeerbaerLP/vencord-userplugins/blob/main/remoteApi.desktop/DOCS.md
