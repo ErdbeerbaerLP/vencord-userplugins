@@ -104,7 +104,13 @@ const server = http.createServer(async (req, res) => {
                     res.end(response);
                 }
                 return;
-
+            case "/vc":
+                if (req.method === "GET") {
+                    var response: string = await handleRequest(JSON.stringify({ method: "getVC" }));
+                    res.writeHead(200);
+                    res.end(response);
+                }
+                return;
             case "/vc/mute/toggle":
                 if (req.method === "GET") {
                     var response: string = await handleRequest(JSON.stringify({ method: "toggleMuted" }));
@@ -210,10 +216,10 @@ const server = http.createServer(async (req, res) => {
                 return;
         }
     }
-    catch (error) {
+    catch (error: any) {
         console.log(error);
         res.writeHead(500);
-        res.end(JSON.stringify({ err: error }));
+        res.end(JSON.stringify({ err: error.toString() }));
         return;
     }
 });
@@ -226,14 +232,14 @@ export function stop() {
     server.close();
 }
 
-function handleRequest(data: string, MAX_RETRIES = 200): Promise<string> {
+function handleRequest(data: string, MAX_RETRIES = 100): Promise<string> {
     var num = qNum++;
     inQueue.set(num, data);
     return new Promise((resolve, reject) => {
         var retries = 0;
         const loop = () => {
             retries++;
-            if (retries > MAX_RETRIES) reject(new Error("timeout"));
+            if (retries > MAX_RETRIES) reject(new Error("Internal request timeout"));
             if (outQueue.has(num)) {
                 var tmp: string = outQueue.get(num)!;
                 resolve(tmp);

@@ -28,8 +28,6 @@ export const settings = definePluginSettings({
 });
 
 
-
-
 let started: boolean = false;
 async function pollServer() {
     while (started) {

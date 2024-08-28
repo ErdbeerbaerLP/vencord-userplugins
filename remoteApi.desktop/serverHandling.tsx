@@ -25,6 +25,26 @@ export async function handle(result) {
             });
             return;
 
+        case "getVC":
+            var ch = SelectedChannelStore.getVoiceChannelId();
+            if (typeof ch == "undefined")
+                fetch(`http://${settings.store.ip}:${settings.store.port}/backend`, {
+                    method: 'POST', mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ num: result.num, payload: { channelId: 0 } })
+                });
+            else
+                fetch(`http://${settings.store.ip}:${settings.store.port}/backend`, {
+                    method: 'POST', mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ num: result.num, payload: { channelId: ch } })
+                });
+            return;
+
         case "toggleGameActivity":
             var targetValue = !ShowCurrentGame.getSetting();
             if (typeof result.cmd.value != "undefined") {
